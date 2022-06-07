@@ -5,7 +5,7 @@ carsales = Flask(__name__)
 
 def connection():
     server = 'localhost' #my server name
-    database = 'vehicles' 
+    database = 'vehicles'
     username = 'postgres'
     password = 'password'
     conn = psycopg2.connect(host=server, database=database, user=username, password=password)
@@ -58,6 +58,17 @@ def updatecar(id):
         conn.commit()
         conn.close()
         return redirect('/')
+
+@carsales.route('/deletecar/<int:id>', methods=['GET'])
+def deletecar(id):
+    conn = connection()
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute("DELETE FROM MadridCars WHERE id = %s", (str(id)))
+        conn.commit()
+        conn.close()
+        return redirect('/')
+
 
 if __name__ == '__main__':
     carsales.run(debug=True)
